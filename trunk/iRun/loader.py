@@ -19,7 +19,7 @@ class RunLoader(bulkloader.Loader):
                                 ('pace',lambda x: datetime.datetime.strptime(x, '%H:%M:%S').time()),
                                 ('pace_max',lambda x: datetime.datetime.strptime(x, '%H:%M:%S').time()),
                                 ('hr', int),
-                                ('hr_max', int),
+                                ('hrmax', int),
                                 ('energy', int),
                                 ('te', float),     
                                ])

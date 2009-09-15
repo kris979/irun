@@ -14,8 +14,15 @@ class Stats(webapp.RequestHandler):
     
     def getFiveLongestRuns(self):
         query = model.Run.all()
-        query.order('-distance')
+        query.filter('activity =','run').order('-distance')
         return query.fetch(5)
+    
+    def getMaxHartRate(self):
+        q = model.Run.all()
+        q.filter('activity =','run').order('hrmax')
+        result = q.fetch(5)
+        log.info(result)
+        return result
         
     def get(self):
         self.__render()
@@ -24,7 +31,8 @@ class Stats(webapp.RequestHandler):
         context = {'user': self.user.nickname(),
                        'logout_url': users.create_logout_url(self.request.uri),
                        'logout_txt': 'Logout', 
-                       'fileLongestRuns':self.getFiveLongestRuns()
+                       'five_longest_runs':self.getFiveLongestRuns()
+#                       'max_hart_rate' : self.getMaxHartRate()
                   }
         self.response.out.write(template.render(self.templatePath,context))
             

@@ -40,7 +40,7 @@ class AddCSV(webapp.RequestHandler):
             run.duration = duration(row[1])
             run.distance = float(row[2])
             run.hr = int(row[3])
-            run.hr_max = int(row[4])
+            run.hrmax = int(row[4])
             run.pace = pace(row[5])
             run.pace_max = pace(row[6])
             run.te = float(row[7])
