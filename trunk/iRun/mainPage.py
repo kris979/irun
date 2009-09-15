@@ -2,12 +2,11 @@ import os
 from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
-from google.appengine.ext import db
 from datetime import date
 import model
 
-#import logging
-#log = logging.getLogger()
+import logging
+log = logging.getLogger()
 
 class MainPage(webapp.RequestHandler):
     def __init__(self):
@@ -38,8 +37,9 @@ class MainPage(webapp.RequestHandler):
             self.__render()
         
     def __getUserRuns(self):
-        query = "SELECT * FROM Run WHERE author = :1 ORDER BY %s DESC" %self.orderBy
-        user_runs = db.GqlQuery(query,self.user)
+        query = model.Run.all()
+        query.filter('author =', self.user).order('-%s'%self.orderBy)
+        user_runs = query.fetch(1000)
         return user_runs
     
     def __render(self):

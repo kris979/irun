@@ -12,7 +12,13 @@
 <body>
 stats
 <table border="1.5">
-{% for result in five_best %}
+<tr>
+    <th>#</th>
+    <th>Date</th>
+    <th>Distance (km)</th>
+    <th>Pace(min/km)</th>
+</tr>
+{% for result in fileLongestRuns %}
 <tr>
  <td style="text-align:center">{{forloop.counter}}</td>
  <td style="text-align:center">{{result.date}}</td>
