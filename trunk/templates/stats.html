@@ -1,0 +1,25 @@
+<html>
+
+<head>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/plainold.css" />
+</head>
+
+<H4><a href="{{logout_url}}">{{logout_txt}}</a> <b>{{user}} - iRun</b> 
+<a href="/">Main</a>
+<a href="charts">Charts</a>
+</H4>
+
+<body>
+stats
+<table border="1.5">
+{% for result in five_best %}
+<tr>
+ <td style="text-align:center">{{forloop.counter}}</td>
+ <td style="text-align:center">{{result.date}}</td>
+ <td style="text-align:center">{{result.distance}}</td>
+ <td style="text-align:center">{{result.pace}}</td>
+</tr>
+{% endfor %}
+</table>
+</body>
+</html>
