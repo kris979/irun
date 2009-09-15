@@ -6,17 +6,20 @@ from google.appengine.ext import db
 from datetime import date
 import model
 
-import logging
-log = logging.getLogger("simple")
+#import logging
+#log = logging.getLogger()
 
 class MainPage(webapp.RequestHandler):
     def __init__(self):
+        self.user = users.get_current_user()
         self.form = model.RunForm()
+        self.templatePath = os.path.join(os.path.dirname(__file__), 'templates/index.html')
         self.orderBy = 'date'
+        self.context = {'user': self.user.nickname(),
+                        'logout_txt': 'Logout'}
 
     def get(self):
         sortby = self.request.get('sort')
-#        log.info(sortby)
         if sortby:
             self.orderBy = sortby   
         self.__render()
@@ -24,51 +27,33 @@ class MainPage(webapp.RequestHandler):
     def post(self):
         data = model.RunForm(data=self.request.POST)
         if data.is_valid():
-            # Save the data, and refresh
-            run = data.save(commit=False)
+            run = data.save(commit=False) #get data from the form
             if users.get_current_user():
                 run.author = users.get_current_user()
             run.added = date.today()
-#            log.info("added: %s" %str(run.added))
-#            log.info("date: %s" %str(run.date))
             run.put()
             self.redirect(self.request.uri)
         else:
             self.form = data
             self.__render()
-            
-    def setForm(self,aform):
-        self.form = aform
-    setform = staticmethod(setForm)
         
-    def __getUserRuns(self,user):
-        runs = []
+    def __getUserRuns(self):
         query = "SELECT * FROM Run WHERE author = :1 ORDER BY %s DESC" %self.orderBy
-        log.info(query)
-        user_runs = db.GqlQuery(query,user)
-        for run in user_runs:    
-#            log.info('key:%s' %str(run.key()))
-            entry = {'date':run.date,'distance':run.distance,'duration':run.duration,'pace':run.pace,
-                    'pace_max':run.pace_max,'hr':run.hr,'hr_max':run.hr_max,'energy':run.energy,
-                    'te':run.te,'activity':run.activity,'key':str(run.key())}
-            runs.append(entry)
-        return runs
+        user_runs = db.GqlQuery(query,self.user)
+        return user_runs
     
     def __render(self):
-        user = users.get_current_user()
-        if user:
-            runs = self.__getUserRuns(user)
-            context = {'user': user.nickname(),
-                       'user_runs': runs,
-                       'logout_url': users.create_logout_url(self.request.uri),
-                       'logout_txt': 'Logout',     
-                       'form' : self.form }
-            path = os.path.join(os.path.dirname(__file__), 'templates/index.html')
-            self.response.out.write(template.render(path,context))
+        if self.user:
+            self.context['user_runs'] =  self.__getUserRuns()    
+            self.context['form'] = self.form
+            self.context['logout_url'] = users.create_logout_url(self.request.uri),
+            self.response.out.write(template.render(self.templatePath,self.context))
         else:
             self.redirect(users.create_login_url(self.request.uri))
         
-
+#    def setForm(self,aform):
+#        self.form = aform
+#    setform = staticmethod(setForm)
             
             
             
