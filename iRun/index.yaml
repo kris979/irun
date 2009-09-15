@@ -10,32 +10,51 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-# Used 26 times in query history.
+# Unused in query history -- copied from input.
+- kind: Run
+  properties:
+  - name: activity
+  - name: date
+
+# Used 6 times in query history.
 - kind: Run
   properties:
   - name: activity
   - name: distance
     direction: desc
 
-# Used 6 times in query history.
+# Used once in query history.
+- kind: Run
+  properties:
+  - name: activity
+  - name: hr
+    direction: desc
+
+# Unused in query history -- copied from input.
 - kind: Run
   properties:
   - name: activity
   - name: hr_max
     direction: desc
 
-# Used once in query history.
+# Unused in query history -- copied from input.
 - kind: Run
   properties:
   - name: activity
   - name: hrmax
 
-# Used 5 times in query history.
+# Used 3 times in query history.
 - kind: Run
   properties:
   - name: activity
   - name: hrmax
     direction: desc
+
+# Used once in query history.
+- kind: Run
+  properties:
+  - name: activity
+  - name: pace_max
 
 # Unused in query history -- copied from input.
 - kind: Run
@@ -51,42 +70,42 @@ indexes:
   - name: Energy
     direction: desc
 
-# Used once in query history.
+# Unused in query history -- copied from input.
 - kind: Run
   properties:
   - name: author
   - name: activity
     direction: desc
 
-# Used 22 times in query history.
+# Used 2 times in query history.
 - kind: Run
   properties:
   - name: author
   - name: date
     direction: desc
 
-# Used 4 times in query history.
+# Unused in query history -- copied from input.
 - kind: Run
   properties:
   - name: author
   - name: distance
     direction: desc
 
-# Used once in query history.
+# Unused in query history -- copied from input.
 - kind: Run
   properties:
   - name: author
   - name: energy
     direction: desc
 
-# Used 2 times in query history.
+# Unused in query history -- copied from input.
 - kind: Run
   properties:
   - name: author
   - name: hr
     direction: desc
 
-# Used 2 times in query history.
+# Unused in query history -- copied from input.
 - kind: Run
   properties:
   - name: author

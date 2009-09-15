@@ -19,11 +19,20 @@ class Stats(webapp.RequestHandler):
     
     def getMaxHartRate(self):
         q = model.Run.all()
-        q.filter('activity =','run').order('hrmax')
-        result = q.fetch(5)
-        log.info(result)
-        return result
-        
+#        q.filter('activity =','run')
+        q.order('-hrmax')
+        results = q.fetch(1)
+#        for r in results:
+#            log.info(r.hrmax)
+        return results[0]
+    
+    def getFastestPace(self):
+        q = model.Run.all()
+        q.filter('activity =','run')
+        q.order('pace_max')
+        results = q.fetch(1)
+        return results[0]
+    
     def get(self):
         self.__render()
            
@@ -31,8 +40,9 @@ class Stats(webapp.RequestHandler):
         context = {'user': self.user.nickname(),
                        'logout_url': users.create_logout_url(self.request.uri),
                        'logout_txt': 'Logout', 
-                       'five_longest_runs':self.getFiveLongestRuns()
-#                       'max_hart_rate' : self.getMaxHartRate()
+                       'five_longest_runs':self.getFiveLongestRuns(),
+                       'max_hart_rate' : self.getMaxHartRate(),
+                       'max_pace' : self.getFastestPace()
                   }
         self.response.out.write(template.render(self.templatePath,context))
             
