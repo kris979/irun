@@ -20,7 +20,7 @@ class Stats(webapp.RequestHandler):
     def getMaxHartRate(self):
         q = model.Run.all()
 #        q.filter('activity =','run')
-        q.order('-hrmax')
+        q.order('-hr_max')
         results = q.fetch(1)
 #        for r in results:
 #            log.info(r.hrmax)

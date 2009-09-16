@@ -15,7 +15,7 @@ class Run(db.Model):
     pace = db.TimeProperty()
     pace_max = db.TimeProperty()
     hr = db.IntegerProperty()
-    hrmax = db.IntegerProperty()
+    hr_max = db.IntegerProperty()
     energy = db.IntegerProperty()
     te = db.FloatProperty()
     activity = db.StringProperty()
