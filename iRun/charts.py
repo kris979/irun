@@ -10,19 +10,40 @@ log = logging.getLogger("simple")
 class Charts(webapp.RequestHandler):
     def __init__(self):
         self.user = users.get_current_user()
+        self.maxEnergy = 0
 
-    def getData(self):
+    def getAvgHR(self):
         query = model.Run.all()
         query.order('date')
-        tmpResults = query.fetch(20)
-        results = []
+        tmpResults = query.fetch(50)
+        tmpResults1 = []
         for item in tmpResults:
             if item.hr:
-                log.info(item.hr)
-                item.hr = int(item.hr) - 100
-                results.append(item)
+                item.hr -= 100
+                tmpResults1.append(item.hr)
+        results = str(tmpResults1)
+        results = results.replace(' ', '')
+        results = results.replace('L', '')
+        results = results.strip('[]')
+        log.info(results)
         return results
-        
+    
+    def getEnergy(self):
+        query = model.Run.all()
+        query.order('date')
+        tmpResults = query.fetch(50)
+        tmpResults1 = []
+        for item in tmpResults:
+            if item.energy:
+                if item.energy > self.maxEnergy: self.maxEnergy=item.energy
+                tmpResults1.append(item.energy)
+        results = str(tmpResults1)
+        results = results.replace(' ', '')
+        results = results.replace('L', '')
+        results = results.strip('[]')
+        log.info(results)
+        return results
+    
     def get(self):
         self.__render()
            
@@ -30,7 +51,9 @@ class Charts(webapp.RequestHandler):
         context = {'user': self.user.nickname(),
                        'logout_url': users.create_logout_url(self.request.uri),
                        'logout_txt': 'Logout',     
-                       'results' : self.getData() 
+                       'results' : self.getAvgHR(),
+                       'energy' : self.getEnergy(),
+                       'max_energy' : self.maxEnergy
                    }
         path = os.path.join(os.path.dirname(__file__), 'templates/charts.html')
         self.response.out.write(template.render(path,context))

@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <link type="text/css" rel="stylesheet" href="/stylesheets/plainold.css" />
+
 </head>
 
 <H4><a href="{{logout_url}}">{{logout_txt}}</a> <b>{{user}} - iRun</b> 
@@ -10,6 +10,30 @@
 </H4>
 
 <body>
-<img src="http://chart.apis.google.com/chart?chs=500x200&amp;chd=t:{% for result in results %}0,{{result.hr}}{% endfor %}&amp;cht=lc&amp;chl/>
+<p>
+<img src="http://chart.apis.google.com/chart?
+chs=800x200
+&amp;chd=t:{{results}}
+&amp;chtt=Average+Hart+Rate+(bpm)
+&amp;cht=bvs
+&amp;chxl=
+0:|d1|d2|d3|d4|
+1:|100|150|200
+&amp;chxt=x,y"
+alt="error" />
+</p>
+<p>
+<img src="http://chart.apis.google.com/chart?
+chs=800x200
+&amp;chd=t:{{energy}}
+&amp;chtt=Energy (kcal)
+&amp;cht=bvs
+&amp;chds=0,{{max_energy}}
+&amp;chxl=d1"
+alt="error" />
+</p>
+ 
+
+
 </body>
 </html>
