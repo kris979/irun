@@ -13,6 +13,7 @@ class Charts(webapp.RequestHandler):
 
     def getAvgHR(self):
         query = model.Run.all()
+        query.filter('author =', users.get_current_user())
         query.order('date')
         tmpResults = query.fetch(50)
         tmpResults1 = []
@@ -29,6 +30,7 @@ class Charts(webapp.RequestHandler):
     
     def getEnergy(self):
         query = model.Run.all()
+        query.filter('author =', users.get_current_user())
         query.order('date')
         tmpResults = query.fetch(50)
         tmpResults1 = []

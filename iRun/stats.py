@@ -13,11 +13,13 @@ class Stats(webapp.RequestHandler):
     
     def getFiveLongestRuns(self):
         query = model.Run.all()
+        query.filter('author =', users.get_current_user())
         query.filter('activity =','run').order('-distance')
         return query.fetch(5)
     
     def getMaxHartRate(self):
         q = model.Run.all()
+        q.filter('author =', users.get_current_user())
         q.order('-hr_max')
         results = q.fetch(1)
         if len(results) > 0:
@@ -27,6 +29,7 @@ class Stats(webapp.RequestHandler):
     
     def getFastestPace(self):
         q = model.Run.all()
+        q.filter('author =', users.get_current_user())
         q.filter('activity =','run')
         q.order('pace_max')
         results = q.fetch(1)
