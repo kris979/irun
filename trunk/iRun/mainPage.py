@@ -29,7 +29,7 @@ class MainPage(webapp.RequestHandler):
         if data.is_valid():
             run = data.save(commit=False) #get data from the form
             if users.get_current_user():
-                run.author = self.user
+                run.author = users.get_current_user()
             run.added = date.today()
             run.put()
             self.redirect(self.request.uri)
