@@ -9,7 +9,6 @@ log = logging.getLogger("simple")
 
 class Charts(webapp.RequestHandler):
     def __init__(self):
-        self.user = users.get_current_user()
         self.maxEnergy = 0
 
     def getAvgHR(self):
@@ -45,7 +44,11 @@ class Charts(webapp.RequestHandler):
         return results
     
     def get(self):
-        self.__render()
+        self.user = users.get_current_user()
+        if self.user:
+            self.__render()
+        else:
+            self.redirect(users.create_login_url(self.request.uri))
            
     def __render(self):
         context = {'user': self.user.nickname(),

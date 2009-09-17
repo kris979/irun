@@ -9,7 +9,6 @@ log = logging.getLogger()
 
 class Stats(webapp.RequestHandler):
     def __init__(self):
-        self.user = users.get_current_user()
         self.templatePath = os.path.join(os.path.dirname(__file__), 'templates/stats.html')
     
     def getFiveLongestRuns(self):
@@ -19,26 +18,32 @@ class Stats(webapp.RequestHandler):
     
     def getMaxHartRate(self):
         q = model.Run.all()
-#        q.filter('activity =','run')
         q.order('-hr_max')
         results = q.fetch(1)
-#        for r in results:
-#            log.info(r.hrmax)
-        return results[0]
+        if len(results) > 0:
+            return results[0]
+        else:
+            return None
     
     def getFastestPace(self):
         q = model.Run.all()
         q.filter('activity =','run')
         q.order('pace_max')
         results = q.fetch(1)
-        return results[0]
+        if len(results) > 0:
+            return results[0]
+        else:
+            return None
     
     def get(self):
-        self.__render()
+        if users.get_current_user():
+            self.__render()
+        else:
+            self.redirect(users.create_login_url(self.request.uri))
            
     def __render(self):
-        context = {'user': self.user.nickname(),
-                       'logout_url': users.create_logout_url(self.request.uri),
+        context = {'user': users.get_current_user(),
+                       'logout_url': users.create_login_url(self.request.uri),
                        'logout_txt': 'Logout', 
                        'five_longest_runs':self.getFiveLongestRuns(),
                        'max_hart_rate' : self.getMaxHartRate(),

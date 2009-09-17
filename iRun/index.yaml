@@ -16,7 +16,7 @@ indexes:
   - name: activity
   - name: date
 
-# Used 4 times in query history.
+# Used 2 times in query history.
 - kind: Run
   properties:
   - name: activity
@@ -50,7 +50,7 @@ indexes:
   - name: hrmax
     direction: desc
 
-# Used 2 times in query history.
+# Used once in query history.
 - kind: Run
   properties:
   - name: activity
@@ -77,7 +77,7 @@ indexes:
   - name: activity
     direction: desc
 
-# Used 3 times in query history.
+# Used 2 times in query history.
 - kind: Run
   properties:
   - name: author
@@ -98,7 +98,7 @@ indexes:
   - name: energy
     direction: desc
 
-# Used once in query history.
+# Unused in query history -- copied from input.
 - kind: Run
   properties:
   - name: author

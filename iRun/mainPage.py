@@ -10,25 +10,26 @@ log = logging.getLogger()
 
 class MainPage(webapp.RequestHandler):
     def __init__(self):
-        self.user = users.get_current_user()
         self.form = model.RunForm()
         self.templatePath = os.path.join(os.path.dirname(__file__), 'templates/index.html')
         self.orderBy = 'date'
-        self.context = {'user': self.user.nickname(),
-                        'logout_txt': 'Logout'}
+
 
     def get(self):
         sortby = self.request.get('sort')
         if sortby:
             self.orderBy = sortby   
-        self.__render()
+        if users.get_current_user():
+            self.__render()
+        else:
+            self.redirect(users.create_login_url(self.request.uri))
             
     def post(self):
         data = model.RunForm(data=self.request.POST)
         if data.is_valid():
             run = data.save(commit=False) #get data from the form
             if users.get_current_user():
-                run.author = users.get_current_user()
+                run.author = self.user
             run.added = date.today()
             run.put()
             self.redirect(self.request.uri)
@@ -38,18 +39,18 @@ class MainPage(webapp.RequestHandler):
         
     def __getUserRuns(self):
         query = model.Run.all()
-        query.filter('author =', self.user).order('-%s'%self.orderBy)
+        query.filter('author =', users.get_current_user()).order('-%s'%self.orderBy)
         user_runs = query.fetch(1000)
         return user_runs
     
     def __render(self):
-        if self.user:
-            self.context['user_runs'] =  self.__getUserRuns()    
-            self.context['form'] = self.form
-            self.context['logout_url'] = users.create_logout_url(self.request.uri),
-            self.response.out.write(template.render(self.templatePath,self.context))
-        else:
-            self.redirect(users.create_login_url(self.request.uri))
+        context = {'user': users.get_current_user(),
+                       'logout_url': users.create_login_url(self.request.uri),
+                       'logout_txt': 'Logout', 
+                       'user_runs' :  self.__getUserRuns(),    
+                       'form' : self.form
+                  }
+        self.response.out.write(template.render(self.templatePath,context))
         
 #    def setForm(self,aform):
 #        self.form = aform
