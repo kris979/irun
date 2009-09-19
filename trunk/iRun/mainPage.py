@@ -14,7 +14,6 @@ class MainPage(webapp.RequestHandler):
         self.templatePath = os.path.join(os.path.dirname(__file__), 'templates/index.html')
         self.orderBy = 'date'
 
-
     def get(self):
         sortby = self.request.get('sort')
         if sortby:
@@ -39,22 +38,21 @@ class MainPage(webapp.RequestHandler):
         
     def __getUserRuns(self):
         query = model.Run.all()
-        query.filter('author =', users.get_current_user()).order('-%s'%self.orderBy)
+        query.filter('author =', users.get_current_user()).order('-%s' %self.orderBy)
         user_runs = query.fetch(1000)
         return user_runs
     
     def __render(self):
+        headers = []
+        for v in model.headers.itervalues():
+            headers.append(v)
         context = {'user': users.get_current_user(),
                        'logout_url': users.create_login_url(self.request.uri),
                        'logout_txt': 'Logout', 
+                       'headers' : headers,
                        'user_runs' :  self.__getUserRuns(),    
                        'form' : self.form
                   }
         self.response.out.write(template.render(self.templatePath,context))
-        
-#    def setForm(self,aform):
-#        self.form = aform
-#    setform = staticmethod(setForm)
-            
-            
+             
             

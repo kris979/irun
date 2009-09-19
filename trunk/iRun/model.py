@@ -3,8 +3,20 @@ Created on Sep 6, 2009
 @author: kris
 '''
 from google.appengine.ext import db
-from google.appengine.ext.webapp import template
+from google.appengine.ext.webapp import template #must be here otherwise appEngine will complain about django settings file
 from google.appengine.ext.db import djangoforms
+
+headers = {'date':'Date (dd/mm/yy)',
+                        'duration':'Duration(hh:mm:ss)',
+                        'distance':'Distance (km)',
+                        'pace':'Pace(min/km)',
+                        'pace_max':'Pace max (min/km)',
+                        'hr':'HR (bpm)',            
+                        'hr_max':'HR max (bpm)',
+                        'energy':'Energy(kcal)',
+                        'te':'TE',
+                        'activity':'Activity'
+                        }
 
 class Run(db.Model):
     author = db.UserProperty()
