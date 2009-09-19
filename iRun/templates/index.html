@@ -39,20 +39,17 @@ Sort by:
 <input type="submit" value="Sort">
 </select>
 </form>
-      
+
+<form method="get" action="/add">
+<input type="submit" value="Email CSV">  
+</form>
+    
 <table border="1.5">
   <tr style="text-align:center">
     <th>#</th>
-    <th>Date</th>
-    <th>Duration(hh:mm:ss)</th>
-    <th>Distance (km)</th>
-    <th>Pace(min/km)</th>
-    <th>Pace max (min/km)</th>
-    <th>HR (bpm)</th>
-    <th>HR max</th>
-    <th>Energy(kcal)</th>
-    <th>TE</th>
-    <th>Activity</th>
+    {% for header in headers %}
+    <th>{{header}}</th>
+    {% endfor %}
     <th>Action</th>
   </tr>
 {% for run in user_runs %}
