@@ -10,47 +10,28 @@ log = logging.getLogger()
 class Stats(webapp.RequestHandler):
     def __init__(self):
         self.templatePath = os.path.join(os.path.dirname(__file__), 'templates/stats.html')
+        self.orderBy = 'date'
     
-    def getFiveLongestRuns(self):
+    def __getUserRuns(self):
         query = model.Run.all()
-        query.filter('author =', users.get_current_user())
-        query.filter('activity =','run').order('-distance')
-        return query.fetch(5)
-    
-    def getMaxHartRate(self):
-        q = model.Run.all()
-        q.filter('author =', users.get_current_user())
-        q.order('-hr_max')
-        results = q.fetch(1)
-        if len(results) > 0:
-            return results[0]
-        else:
-            return None
-    
-    def getFastestPace(self):
-        q = model.Run.all()
-        q.filter('author =', users.get_current_user())
-        q.filter('activity =','run')
-        q.order('pace_max')
-        results = q.fetch(1)
-        if len(results) > 0:
-            return results[0]
-        else:
-            return None
-    
-    def get(self):
-        if users.get_current_user():
-            self.__render()
-        else:
-            self.redirect(users.create_login_url(self.request.uri))
+        query.filter('author =', users.get_current_user()).order('-%s' %self.orderBy)
+        user_runs = query.fetch(1000)
+        return user_runs
            
     def __render(self):
         context = {'user': users.get_current_user(),
                        'logout_url': users.create_login_url(self.request.uri),
                        'logout_txt': 'Logout', 
-                       'five_longest_runs':self.getFiveLongestRuns(),
-                       'max_hart_rate' : self.getMaxHartRate(),
-                       'max_pace' : self.getFastestPace()
+                       'headers' : model.headers,
+                       'user_runs' : self.__getUserRuns()
                   }
         self.response.out.write(template.render(self.templatePath,context))
-            
+    
+    def get(self):
+        sortby = self.request.get('sort')
+        if sortby:
+            self.orderBy = sortby   
+        if users.get_current_user():
+            self.__render()
+        else:
+            self.redirect(users.create_login_url(self.request.uri))      
