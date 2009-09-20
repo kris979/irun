@@ -22,7 +22,7 @@ class AddCSV(webapp.RequestHandler):
 
     def prepareExportCSVFile(self):
         csv = ''
-        for k in model.headers.keys():
+        for k in model.headers:
             csv += k
             csv += ','
         csv = csv.rstrip(',')
@@ -32,8 +32,8 @@ class AddCSV(webapp.RequestHandler):
         q.order('-date')
         results = q.fetch(1000)
         for run in results:
-            line = str(run.date) + ',' + str(run.duration) + ',' + str(run.distance) + ',' + str(run.hr) \
-             + ',' + str(run.hr_max) + ',' + str(run.pace) + ',' + str(run.pace_max) + ',' + str(run.te) + ',' \
+            line = str(run.date) + ',' + run.duration.strftime('%H:%M:%S') + ',' + str(run.distance) + ',' + str(run.hr) \
+             + ',' + str(run.hr_max) + ',' + run.pace.strftime('%M:%S') + ',' + run.pace_max.strftime('%M:%S') + ',' + str(run.te) + ',' \
              + str(run.energy) + ',' + run.activity + '\n'
             csv += line
         return csv

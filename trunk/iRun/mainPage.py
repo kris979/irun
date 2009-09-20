@@ -12,12 +12,8 @@ class MainPage(webapp.RequestHandler):
     def __init__(self):
         self.form = model.RunForm()
         self.templatePath = os.path.join(os.path.dirname(__file__), 'templates/index.html')
-        self.orderBy = 'date'
 
     def get(self):
-        sortby = self.request.get('sort')
-        if sortby:
-            self.orderBy = sortby   
         if users.get_current_user():
             self.__render()
         else:
@@ -43,16 +39,61 @@ class MainPage(webapp.RequestHandler):
         return user_runs
     
     def __render(self):
-        headers = []
-        for v in model.headers.itervalues():
-            headers.append(v)
         context = {'user': users.get_current_user(),
                        'logout_url': users.create_login_url(self.request.uri),
                        'logout_txt': 'Logout', 
-                       'headers' : headers,
-                       'user_runs' :  self.__getUserRuns(),    
-                       'form' : self.form
+                       'form' : self.form,
+                       'max_hart_rate' : self.getMaxHartRate(),
+                       'max_pace' : self.getFastestPace(),
+                       'longest_run' : self.getLongestRun(),
+                       'fastest_5k' : self.getFastest(5.0),
+                       'fastest_10k' : self.getFastest(10.0),
+                       'fastest_15k' : self.getFastest(15.0),
+                       'fastest_20k' : self.getFastest(20.0),
                   }
         self.response.out.write(template.render(self.templatePath,context))
-             
-            
+    
+    def getLongestRun(self):
+        q = model.Run.all()
+        q.filter('author =', users.get_current_user())
+        q.order('-distance')
+        results = q.fetch(1)
+        if len(results) > 0:
+            return results[0]
+        else:
+            return None
+        
+    def getMaxHartRate(self):
+        q = model.Run.all()
+        q.filter('author =', users.get_current_user())
+        q.order('-hr_max')
+        results = q.fetch(1)
+        if len(results) > 0:
+            return results[0]
+        else:
+            return None
+    
+    def getFastest(self, distance):
+        q = model.Run.all()
+        q.filter('author =', users.get_current_user())
+        q.filter('activity =','run')
+        q.filter('distance >=',distance)
+        results = q.fetch(1000)
+        if len(results) == 0:
+            return None
+        best = results[0].duration
+        for result in results:
+            if result.duration < best:
+                best = result.duration 
+        return best  
+        
+    def getFastestPace(self):
+        q = model.Run.all()
+        q.filter('author =', users.get_current_user())
+        q.filter('activity =','run')
+        q.order('pace_max')
+        results = q.fetch(1)
+        if len(results) > 0:
+            return results[0]
+        else:
+            return None       
