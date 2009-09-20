@@ -5,71 +5,43 @@
 </head>
 
 <H4><a href="{{logout_url}}">{{logout_txt}}</a> <b>{{user}} - iRun</b> 
-<a href="stats">Stats</a>
-<a href="charts">Charts</a>
+<a href="stats">My Runs</a>
+<a href="charts">My Charts</a>
 </H4>
 
 <body>
 
-<form action="/" method="POST">
-<table>
-{{ form.as_table }}
-</table>
-Add new entry: 
-<input type="submit" value="Add" />
-</form>
-
 <form action="/add" enctype="multipart/form-data" method="post">
-<div>
       CSV upload:
      <input type="file" name="csv"/>
      <input type="submit" value="Upload">
-</div>
 </form>
 
-<form method="get" action="/">
-Sort by:
-<select name="sort">
-<option>activity</option>
-<option>date</option>
-<option>distance</option>
-<option>energy</option>
-<option>hr</option>
-<option>pace</option>
-<input type="submit" value="Sort">
-</select>
-</form>
-
-<form method="get" action="/add">
-<input type="submit" value="Email CSV">  
-</form>
-    
-<table border="1.5">
-  <tr style="text-align:center">
-    <th>#</th>
-    {% for header in headers %}
-    <th>{{header}}</th>
-    {% endfor %}
-    <th>Action</th>
-  </tr>
-{% for run in user_runs %}
-  <tr>
-    <td style="text-align:center">{{forloop.counter}}</td>
-    <td style="text-align:center">{{run.date}}</td>
-    <td style="text-align:center">{{run.duration}}</td>
-    <td style="text-align:center">{{run.distance}}</td>
-    <td style="text-align:center">{{run.pace}}</td>
-    <td style="text-align:center">{{run.pace_max}}</td>
-    <td style="text-align:center">{{run.hr}}</td>
-    <td style="text-align:center">{{run.hr_max}}</td>
-    <td style="text-align:center">{{run.energy}}</td>
-    <td style="text-align:center">{{run.te}}</td>
-    <td style="text-align:center">{{run.activity}}</td>
-    <td style="text-align:center"><a href="/edit?id={{run.key}}">Edit</a>  <a href="/delete?id={{run.key}}">Delete</a></td>
-  </tr>
-{% endfor %}
-
+<div>
+<table>
+<tr>
+<td>
+    <form action="/" method="POST">
+    <table>
+    {{ form.as_table }}
+    </table>
+    <p><input type="submit" value="Add"/></p>
+    </form>
+</td>
+<td>
+    <p>Longest Run: {{longest_run.distance}} at {{longest_run.date}}</p>
+    <p>Fastest pace: {{max_pace.pace_max}} when {{max_pace.activity}}ing for {{max_pace.distance}} km</p>
+    <p>Max hart rate: {{max_hart_rate.hr_max}} when {{max_hart_rate.activity}}ing for {{max_hart_rate.distance}} km</p>
+</td>
+<td>
+    Fastest 5k: {{fastest_5k}}
+    <p>Fastest 10k: {{fastest_10k}}</p>
+    <p>Fastest 15k: {{fastest_15k}}</p>
+    <p>Fastest 20k: {{fastest_20k}}</p>
+</td>
+</tr>
 </table>
+</div>
 
 </body>
 </html>
