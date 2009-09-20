@@ -5,35 +5,53 @@
 </head>
 
 <H4><a href="{{logout_url}}">{{logout_txt}}</a> <b>{{user}} - iRun</b> 
-<a href="/">Main</a>
-<a href="charts">Charts</a>
+<a href="/">Home</a>
+<a href="charts">My Charts</a>
 </H4>
 
 <body>
 
-<p>Best times (5k,10k,20k,marathon)</p>
-<p>Max hart rate: <b>{{max_hart_rate.hr_max}}</b></p>
-<p>Fastest pace: <b>{{max_pace.pace_max}}</b></p>
- 
+<form method="get" action="/add">
+<input type="submit" value="Email CSV">  
+</form>
 
-<div>
-<table border="1.5" title="5 longest runs">
-Five longest runs
-<tr>
+<form method="get" action="/stats">
+Sort by:
+<select name="sort">
+<option>activity</option>
+<option>date</option>
+<option>distance</option>
+<option>energy</option>
+<option>hr</option>
+<option>pace</option>
+<input type="submit" value="Sort">
+</select>
+</form>
+
+<table border="1.5">
+  <tr style="text-align:center">
     <th>#</th>
-    <th>Date</th>
-    <th>Distance (km)</th>
-    <th>Pace(min/km)</th>
-</tr>
-{% for result in five_longest_runs %}
-<tr>
- <td style="text-align:center">{{forloop.counter}}</td>
- <td style="text-align:center">{{result.date}}</td>
- <td style="text-align:center">{{result.distance}}</td>
- <td style="text-align:center">{{result.pace}}</td>
-</tr>
+    {% for header in headers %}
+    <th>{{header}}</th>
+    {% endfor %}
+    <th>Action</th>
+  </tr>
+{% for run in user_runs %}
+  <tr>
+    <td style="text-align:center">{{forloop.counter}}</td>
+    <td style="text-align:center">{{run.date}}</td>
+    <td style="text-align:center">{{run.duration}}</td>
+    <td style="text-align:center">{{run.distance}}</td>
+    <td style="text-align:center">{{run.pace}}</td>
+    <td style="text-align:center">{{run.pace_max}}</td>
+    <td style="text-align:center">{{run.hr}}</td>
+    <td style="text-align:center">{{run.hr_max}}</td>
+    <td style="text-align:center">{{run.energy}}</td>
+    <td style="text-align:center">{{run.te}}</td>
+    <td style="text-align:center">{{run.activity}}</td>
+    <td style="text-align:center"><a href="/edit?id={{run.key}}">Edit</a>  <a href="/delete?id={{run.key}}">Delete</a></td>
+  </tr>
 {% endfor %}
-</table>
-</div>
+
 </body>
 </html>
