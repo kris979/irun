@@ -107,13 +107,13 @@ indexes:
   - name: activity
     direction: desc
 
-# Unused in query history -- copied from input.
+# Used 2 times in query history.
 - kind: Run
   properties:
   - name: author
   - name: date
 
-# Unused in query history -- copied from input.
+# Used once in query history.
 - kind: Run
   properties:
   - name: author

@@ -1,20 +1,20 @@
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
-import error
-import upload
-import mainPage
-import edit
-import stats
-import charts
+import views.error
+import data.upload
+import views.edit
+import views.runs
+import views.charts
+import views.home
 
 application = webapp.WSGIApplication(
-                                     [('/', mainPage.MainPage),
-                                      ('/stats', stats.Stats),
-                                      ('/charts', charts.Charts),
-                                      ('/add', upload.AddCSV),
-                                      ('/edit', edit.Edit),
-                                      ('/delete', edit.Delete),
-                                      ('/err', error.Err)
+                                     [('/', views.home.MainPage),
+                                      ('/stats', views.runs.Stats),
+                                      ('/charts', views.charts.Charts),
+                                      ('/add', data.upload.AddCSV),
+                                      ('/edit', views.edit.Edit),
+                                      ('/delete', views.edit.Delete),
+                                      ('/err', views.error.Err)
                                      ],
                                      debug=True)
 def main():
