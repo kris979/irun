@@ -3,7 +3,8 @@ from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from datetime import date
-import model
+from datetime import timedelta
+from model import model
 
 import logging
 log = logging.getLogger()
@@ -46,10 +47,10 @@ class MainPage(webapp.RequestHandler):
                        'max_hart_rate' : self.getMaxHartRate(),
                        'max_pace' : self.getFastestPace(),
                        'longest_run' : self.getLongestRun(),
-                       'fastest_5k' : self.getFastest(5.0),
-                       'fastest_10k' : self.getFastest(10.0),
-                       'fastest_15k' : self.getFastest(15.0),
-                       'fastest_20k' : self.getFastest(20.0),
+                       'fastest_5k' : self.getFastest(5),
+                       'fastest_10k' : self.getFastest(10),
+                       'fastest_15k' : self.getFastest(15),
+                       'fastest_20k' : self.getFastest(20),
                   }
         self.response.out.write(template.render(self.templatePath,context))
     
@@ -77,14 +78,16 @@ class MainPage(webapp.RequestHandler):
         q = model.Run.all()
         q.filter('author =', users.get_current_user())
         q.filter('activity =','run')
-        q.filter('distance >=',distance)
+        q.filter('distance >=',float(distance))
         results = q.fetch(1000)
         if len(results) == 0:
             return None
-        best = results[0].duration
+        best = timedelta(hours=9)
         for result in results:
-            if result.duration < best:
-                best = result.duration 
+            k_pace = timedelta(hours=result.pace.hour,minutes=result.pace.minute,seconds=result.pace.second)
+            timeForGivenDistance = k_pace*distance
+            if timeForGivenDistance < best:
+                best = timeForGivenDistance
         return best  
         
     def getFastestPace(self):

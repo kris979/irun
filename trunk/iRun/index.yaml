@@ -10,7 +10,7 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-# Used 48 times in query history.
+# Used 4 times in query history.
 - kind: Run
   properties:
   - name: activity
@@ -33,7 +33,7 @@ indexes:
   - name: distance
     direction: desc
 
-# Used 12 times in query history.
+# Used once in query history.
 - kind: Run
   properties:
   - name: activity
@@ -100,20 +100,20 @@ indexes:
   - name: Energy
     direction: desc
 
-# Used once in query history.
+# Unused in query history -- copied from input.
 - kind: Run
   properties:
   - name: author
   - name: activity
     direction: desc
 
-# Used 8 times in query history.
+# Unused in query history -- copied from input.
 - kind: Run
   properties:
   - name: author
   - name: date
 
-# Used 8 times in query history.
+# Unused in query history -- copied from input.
 - kind: Run
   properties:
   - name: author
@@ -126,14 +126,14 @@ indexes:
   - name: author
   - name: distance
 
-# Used 12 times in query history.
+# Used once in query history.
 - kind: Run
   properties:
   - name: author
   - name: distance
     direction: desc
 
-# Used once in query history.
+# Unused in query history -- copied from input.
 - kind: Run
   properties:
   - name: author
@@ -147,7 +147,7 @@ indexes:
   - name: hr
     direction: desc
 
-# Used 12 times in query history.
+# Used once in query history.
 - kind: Run
   properties:
   - name: author
