@@ -1,0 +1,1 @@
+iRun is a website where users can record results from their runs as well as other sport activities. iRun keeps track of important stats (i.e. best times or max hart rate). It also produces various charts i.e. how your average hart rate changes over time, how many miles you run in a week etc.
